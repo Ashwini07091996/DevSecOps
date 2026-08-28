@@ -15,6 +15,15 @@ jobs:
 
     steps:
 
+      - name: SonarCloud SAST
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=ashwini07091996devsecops
+            -Dsonar.projectKey=Ashwini07091996_DevSecOps
+
       - name: Checkout source code
         uses: actions/checkout@v4
 
