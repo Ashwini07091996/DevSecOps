@@ -15,6 +15,9 @@ jobs:
 
     steps:
 
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
       - name: SonarCloud SAST
         uses: SonarSource/sonarqube-scan-action@v6
         env:
@@ -23,9 +26,6 @@ jobs:
           args: >
             -Dsonar.organization=ashwini07091996devsecops
             -Dsonar.projectKey=Ashwini07091996_DevSecOps
-
-      - name: Checkout source code
-        uses: actions/checkout@v4
 
       - name: Build Docker image
         run: |
