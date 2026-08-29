@@ -1,6 +1,5 @@
 from flask import Flask, jsonify
 import os
-import subprocess
 
 app = Flask(__name__)
 
@@ -28,13 +27,3 @@ def config():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
-
-
-def run_command(user_input):
-    result = subprocess.run(
-        user_input,
-        shell=True,
-        capture_output=True,
-        text=True
-    )
-    return result.stdout
