@@ -18,14 +18,15 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: SonarCloud SAST
+      - name: SonarQube SAST
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.organization=ashwini07091996devsecops
-            -Dsonar.projectKey=Ashwini07091996_DevSecOps
+            -Dsonar.projectKey=payment-api
+            -Dsonar.projectName=payment-api
             -Dsonar.qualitygate.wait=true
 
       - name: Build Docker image
