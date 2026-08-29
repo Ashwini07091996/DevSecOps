@@ -53,22 +53,45 @@ jobs:
           image-ref: ${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           format: table
           severity: HIGH,CRITICAL
-          ##exit-code: '1'
+          # exit-code: '1'
 
       # --------------------------------------------------
-      # Deployment starts ONLY for push to main
+      # Debug GitHub OIDC claims
       # --------------------------------------------------
-
-      - name: Debug OIDC claims
-        uses: github/actions-oidc-debugger@v1.0.0
-        with:
-          audience: sts.amazonaws.com
 
       - name: Debug GitHub context
         run: |
           echo "Repository: $GITHUB_REPOSITORY"
           echo "Ref: $GITHUB_REF"
           echo "Event: $GITHUB_EVENT_NAME"
+
+      - name: Get OIDC token claims
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          TOKEN=$(curl -sSf \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
+            | jq -r '.value')
+
+          echo "OIDC token received successfully"
+
+          PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f2)
+
+          # Add padding for base64 decoding
+          PADDING=$(( (4 - ${#PAYLOAD} % 4) % 4 ))
+          if [ "$PADDING" -gt 0 ]; then
+            PAYLOAD="${PAYLOAD}$(printf '=%.0s' $(seq 1 $PADDING))"
+          fi
+
+          echo "$PAYLOAD" | base64 -d | jq '{
+            iss,
+            aud,
+            sub,
+            repository,
+            repository_owner,
+            ref,
+            event_name
+          }'
 
       # 5. Configure AWS using GitHub OIDC
       - name: Configure AWS credentials
