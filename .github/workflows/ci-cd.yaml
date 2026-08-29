@@ -25,7 +25,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=ashwini07091996devsecops
-            -Dsonar.projectKey=Ashwini07091996_DevSecOps
+            -Dsonar.projectKey=Ashwini07091996_DevSecOps2
 
       - name: Build Docker image
         run: |
