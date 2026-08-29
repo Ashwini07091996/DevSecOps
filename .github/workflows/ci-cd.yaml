@@ -26,6 +26,7 @@ jobs:
           args: >
             -Dsonar.organization=ashwini07091996devsecops
             -Dsonar.projectKey=Ashwini07091996_DevSecOps
+            -Dsonar.qualitygate.wait=true
 
       - name: Build Docker image
         run: |
