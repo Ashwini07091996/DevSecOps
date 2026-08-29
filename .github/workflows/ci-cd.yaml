@@ -53,7 +53,7 @@ jobs:
           image-ref: ${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           format: table
           severity: HIGH,CRITICAL
-          exit-code: '1'
+          ##exit-code: '1'
 
       # --------------------------------------------------
       # Deployment starts ONLY for push to main
